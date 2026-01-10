@@ -122,30 +122,7 @@ A shared Docker Compose setup will provide:
 
 This enables developers to run multiple services locally with minimal setup.
 
----
-
-## 📌 Repository Purpose
-
-This repository is intentionally **code-light** and **documentation-heavy**.
-
-It serves as:
-
-* Architectural reference
-* Onboarding guide
-* Interview walkthrough
-* Single source of truth for VNatives
-
----
-
-## 🚀 Next Milestones
-
-* Finalize local Docker Compose
-* Implement first vertical slice (Auth → User → Shop → Product → Search)
-* Add architecture diagrams
-* Document Kafka event schemas
-
----
-
-## 👨‍💻 Author
+---## 👨‍💻 Author
 
 **VNatives Platform** – Designed and implemented as a learning-focused, production-grade backend system.
+**By Sundar Pirabu Raj R
