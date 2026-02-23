@@ -1,128 +1,179 @@
-# VNatives Platform
+VNatives Platform
 
-## 🌱 What is VNatives?
+An Event-Driven, Microservices-Based Commerce System (Production-Grade Learning Project)
 
-VNatives is a domain-driven, event-based e-commerce platform built to empower **native people** to sell their native products while preserving authenticity, transparency, and scalability.
+🚀 Overview
 
-The platform follows a **pure microservices architecture**, where each service is independently deployable, versioned, and scalable. Communication between services is primarily **event-driven using Kafka**.
+VNatives is a distributed e-commerce backend platform designed using microservices, event-driven architecture, and domain-driven design principles.
 
-This repository (`vnatives-platform`) acts as the **central entry point** for understanding the system architecture, workflows, and local setup.
+The platform is built to simulate real-world, large-scale backend systems where:
 
----
+Services are independently deployable
 
-## 🧭 High-Level Architecture
+Data ownership is strictly enforced
 
-**Architecture Style**
+Communication happens asynchronously via events
 
-* Microservices
-* Event-driven (Kafka)
-* Domain-driven design
-* Cloud-native (AWS-ready)
+Read and write workloads are intentionally separated
 
-**Core Principles**
+This repository represents the platform-level view of VNatives and acts as the system entry point for understanding architecture, services, and workflows.
 
-* Independent deployability
-* Loose coupling via events
-* Strong consistency where required (Orders, Payments)
-* Scalability for read-heavy workloads (Search, Analytics)
+🎯 Purpose of This Project
 
----
+This project is built to demonstrate MAANG-level backend engineering thinking, not just feature implementation.
 
-## 🧩 Service Landscape
+It focuses on:
 
-### 👤 User Domain
+Designing scalable microservices
 
-* **vnatives-user-auth-service** – Authentication, JWT, roles
-* **vnatives-user-profile-service** – Native & customer profiles
+Handling distributed workflows
 
-### 🛒 Commerce Domain
+Event-based communication using Kafka
 
-* **vnatives-commerce-shop-service** – Shop creation & management
-* **vnatives-commerce-product-catalog-service** – Products & categories
-* **vnatives-commerce-pricing-discount-service** – Pricing & offers
+Data consistency and isolation
 
-### 📦 Order Domain
+Cloud-ready, containerized systems
 
-* **vnatives-order-core-service** – Order lifecycle
-* **vnatives-order-management-service** – Order tracking (Redis)
-* **vnatives-order-review-rating-service** – Reviews & ratings
+VNatives is a learning-to-production bridge project that reflects how real backend systems are designed, not just how APIs are written.
 
-### 🔧 Supporting Services
+🧠 Core Engineering Principles
 
-* **vnatives-payment-service** – Payments & transactions
-* **vnatives-search-service** – Product search (ElasticSearch)
-* **vnatives-notification-service** – Email / SMS notifications
-* **vnatives-media-service** – Image & video uploads (S3)
-* **vnatives-analytics-archive-service** – Analytics & reporting
+Microservices Architecture
 
-### 🧩 Shared Libraries
+Event-Driven Communication
 
-* **vnatives-common-entity-sdk** – Shared DTOs & event models
-* **vnatives-kafka-retry-sdk** – Retry & DLQ handling
+Domain-Driven Design (DDD)
 
----
+Database per Service
 
-## 🔁 Core Workflows
+Asynchronous Processing
 
-### Native (Seller) Flow
+Loose Coupling via Kafka
 
-1. Native registers using User Profile Service
-2. Creates shop and products
-3. Uploads media via Media Service
-4. Configures pricing & discounts
-5. Product and shop events published to Kafka
-6. Search and Analytics services consume events asynchronously
+Cloud-Native & Container-Ready
 
-### User (Customer) Flow
+🏗️ High-Level Architecture
+Clients
+   ↓
+Security Gateway
+   ↓
+Domain Microservices
+   ↓
+Kafka (Event Backbone)
+   ↓
+Async Consumers (Search, Analytics-ready)
 
-1. User authenticates via Auth Service
-2. Searches products via Search Service
-3. Views product details, reviews, and media
-4. Places order
-5. Completes payment (Saga-based flow)
-6. Receives notifications
-7. Tracks order status
-8. User interactions published to Analytics
+Each service:
 
----
+Owns its database
 
-## 🗄️ Data Storage Strategy
+Publishes domain events
 
-| Service Type         | Technology                 | Reason                  |
-| -------------------- | -------------------------- | ----------------------- |
-| User, Order, Payment | MySQL (RDS)                | ACID compliance         |
-| Product Catalog      | MongoDB                    | Schema flexibility      |
-| Search               | ElasticSearch / OpenSearch | Full-text search        |
-| Order Tracking       | Redis                      | Fast reads              |
-| Media                | S3                         | Scalable object storage |
+Consumes only required events
 
----
+Can scale independently
 
-## 🧰 Tech Stack
+🧩 Current Service Landscape
+🛒 Commerce Domain
+Service	Responsibility
+vnatives-commerce-shop-service	Seller shop onboarding & management
+vnatives-commerce-product-catalog-service	Product & category management
+vnatives-commerce-inventory-service	Inventory & stock tracking
+vnatives-commerce-pricing-discount-service	Pricing rules & discounts
+📦 Order Domain
+Service	Responsibility
+vnatives-order-core-service	Order creation & lifecycle management
+vnatives-payment-service	Payment processing & transactions
+vnatives-review-rating-service	Product reviews & ratings
+🔍 Search Domain
+Service	Responsibility
+vnatives-search-consumer	Kafka consumer for indexing product events
+vnatives-search-service	Product search APIs (ElasticSearch)
+👤 User Domain
+Service	Responsibility
+vnatives-user-profile-service	User & seller profile management
+🔐 Platform & Infrastructure
+Component	Responsibility
+vnatives-security-gateway	API Gateway & request security
+vnatives-common-sdk	Shared DTOs, events, and constants
+vnatives-infra	Infrastructure configs (Docker, Kafka, DBs)
+🔁 Core Workflows
+🧑‍🌾 Seller (Native) Flow
 
-* **Backend:** Java, Spring Boot
-* **Messaging:** Kafka
-* **Databases:** MySQL, MongoDB, Redis
-* **Search:** ElasticSearch
-* **Containerization:** Docker
-* **Cloud:** AWS (ECS / EKS)
-* **Monitoring:** Prometheus, Grafana
+Seller profile created
 
----
+Shop created
 
-## 🏗️ Local Development (Planned)
+Products added
 
-A shared Docker Compose setup will provide:
+Inventory & pricing configured
 
-* Kafka + Zookeeper
-* MySQL
-* MongoDB
-* ElasticSearch
-* Redis
+Product events published to Kafka
 
-This enables developers to run multiple services locally with minimal setup.
+Search consumer indexes products asynchronously
 
----## 👨‍💻 Author
+Key Idea:
+Commerce services never directly call Search — events drive the system.
 
-**VNatives Platform** – Designed and implemented as a learning-focused, production-grade backend system.
-**By Sundar Pirabu Raj R
+🛍️ Customer Flow
+
+User searches products via Search Service
+
+Views product details & reviews
+
+Places an order
+
+Payment processed
+
+Order lifecycle updated
+
+Read-heavy operations optimized separately
+
+🗄️ Data Storage Strategy
+Use Case	Technology	Reason
+Orders & Payments	MySQL	ACID consistency
+Product Catalog	MongoDB	Flexible schema
+Inventory	MySQL	Strong consistency
+Search	ElasticSearch	Fast full-text search
+Caching (future)	Redis	Low-latency reads
+🧰 Tech Stack
+
+Language: Java
+
+Framework: Spring Boot
+
+Messaging: Apache Kafka
+
+Databases: MySQL, MongoDB
+
+Search Engine: ElasticSearch
+
+Containerization: Docker
+
+Build Tool: Maven
+
+Cloud Target: AWS (ECS / EKS ready)
+
+🧪 Local Development
+
+Infrastructure is managed via vnatives-infra and includes:
+
+Kafka & Zookeeper
+
+MySQL
+
+MongoDB
+
+ElasticSearch
+
+Each service can be run independently or together using Docker Compose.
+
+👨‍💻 Author
+
+Sundar Pirabu Raj R
+Backend Engineer | Java | Spring Boot | Distributed Systems
+📍 Chennai, India
+
+📜 License
+
+Apache License 2.0
