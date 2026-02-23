@@ -1,26 +1,32 @@
-VNatives Platform
+🌱 VNatives Platform
+Event-Driven Microservices Commerce System
 
-An Event-Driven, Microservices-Based Commerce System (Production-Grade Learning Project)
+(Production-Grade Learning Project)
 
 🚀 Overview
 
-VNatives is a distributed e-commerce backend platform designed using microservices, event-driven architecture, and domain-driven design principles.
+VNatives is a distributed e-commerce backend platform designed using:
 
-The platform is built to simulate real-world, large-scale backend systems where:
+Microservices architecture
 
-Services are independently deployable
+Event-driven communication
 
-Data ownership is strictly enforced
+Domain-Driven Design (DDD)
 
-Communication happens asynchronously via events
+The goal is to simulate real-world, large-scale backend systems, not just CRUD APIs.
 
-Read and write workloads are intentionally separated
+What this platform demonstrates
 
-This repository represents the platform-level view of VNatives and acts as the system entry point for understanding architecture, services, and workflows.
+✔ Independent service deployment
+✔ Strict data ownership
+✔ Asynchronous communication via events
+✔ Clear separation of read & write workloads
 
-🎯 Purpose of This Project
+This repository provides a platform-level view of the system architecture, services, and workflows.
 
-This project is built to demonstrate MAANG-level backend engineering thinking, not just feature implementation.
+🎯 Why This Project Exists
+
+This project is intentionally built to showcase MAANG-level backend engineering thinking.
 
 It focuses on:
 
@@ -30,11 +36,11 @@ Handling distributed workflows
 
 Event-based communication using Kafka
 
-Data consistency and isolation
+Data consistency & isolation
 
 Cloud-ready, containerized systems
 
-VNatives is a learning-to-production bridge project that reflects how real backend systems are designed, not just how APIs are written.
+VNatives bridges the gap between learning projects and production-grade backend systems.
 
 🧠 Core Engineering Principles
 
@@ -44,7 +50,7 @@ Event-Driven Communication
 
 Domain-Driven Design (DDD)
 
-Database per Service
+Database-per-Service
 
 Asynchronous Processing
 
@@ -61,17 +67,16 @@ Domain Microservices
    ↓
 Kafka (Event Backbone)
    ↓
-Async Consumers (Search, Analytics-ready)
+Async Consumers (Search, Read Models)
+Design Characteristics
 
-Each service:
+Each service owns its database
 
-Owns its database
+Services publish domain events
 
-Publishes domain events
+Services consume only required events
 
-Consumes only required events
-
-Can scale independently
+Every service scales independently
 
 🧩 Current Service Landscape
 🛒 Commerce Domain
@@ -82,12 +87,12 @@ vnatives-commerce-inventory-service	Inventory & stock tracking
 vnatives-commerce-pricing-discount-service	Pricing rules & discounts
 📦 Order Domain
 Service	Responsibility
-vnatives-order-core-service	Order creation & lifecycle management
-vnatives-payment-service	Payment processing & transactions
+vnatives-order-core-service	Order creation & lifecycle
+vnatives-payment-service	Payment processing
 vnatives-review-rating-service	Product reviews & ratings
 🔍 Search Domain
 Service	Responsibility
-vnatives-search-consumer	Kafka consumer for indexing product events
+vnatives-search-consumer	Kafka consumer for indexing
 vnatives-search-service	Product search APIs (ElasticSearch)
 👤 User Domain
 Service	Responsibility
@@ -95,8 +100,8 @@ vnatives-user-profile-service	User & seller profile management
 🔐 Platform & Infrastructure
 Component	Responsibility
 vnatives-security-gateway	API Gateway & request security
-vnatives-common-sdk	Shared DTOs, events, and constants
-vnatives-infra	Infrastructure configs (Docker, Kafka, DBs)
+vnatives-common-sdk	Shared DTOs & event contracts
+vnatives-infra	Docker, Kafka & DB infrastructure
 🔁 Core Workflows
 🧑‍🌾 Seller (Native) Flow
 
@@ -108,11 +113,12 @@ Products added
 
 Inventory & pricing configured
 
-Product events published to Kafka
+Domain events published to Kafka
 
 Search consumer indexes products asynchronously
 
-Key Idea:
+Key Design Insight
+
 Commerce services never directly call Search — events drive the system.
 
 🛍️ Customer Flow
@@ -123,19 +129,19 @@ Views product details & reviews
 
 Places an order
 
-Payment processed
+Payment is processed
 
-Order lifecycle updated
+Order lifecycle is updated
 
-Read-heavy operations optimized separately
+Read-heavy operations are optimized separately from write workflows.
 
 🗄️ Data Storage Strategy
 Use Case	Technology	Reason
 Orders & Payments	MySQL	ACID consistency
 Product Catalog	MongoDB	Flexible schema
 Inventory	MySQL	Strong consistency
-Search	ElasticSearch	Fast full-text search
-Caching (future)	Redis	Low-latency reads
+Search	ElasticSearch	Full-text search
+Caching (planned)	Redis	Low-latency reads
 🧰 Tech Stack
 
 Language: Java
