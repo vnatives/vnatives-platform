@@ -1,185 +1,194 @@
-🌱 VNatives Platform
-Event-Driven Microservices Commerce System
+# 🌱 VNatives  
+## Event-Driven Microservices Commerce Platform  
+### Production-Grade Backend Engineering Project
 
-(Production-Grade Learning Project)
+VNatives is a large-scale, distributed e-commerce backend platform built to demonstrate **real-world backend engineering** — not CRUD tutorials.
 
-🚀 Overview
+This project showcases how modern commerce systems are designed using **microservices**, **event-driven architecture**, and **domain-driven design (DDD)**, similar to production systems used at scale.
 
-VNatives is a distributed e-commerce backend platform designed using:
+---
 
-Microservices architecture
+## 🚀 Why VNatives?
 
-Event-driven communication
+- Designing scalable microservices  
+- Handling distributed workflows  
+- Event-driven data propagation  
+- Read / write workload separation  
+- Strict data ownership & isolation  
+- Cloud-ready containerized systems  
 
-Domain-Driven Design (DDD)
+**VNatives bridges the gap between learning projects and production-grade backend systems.**
 
-The goal is to simulate real-world, large-scale backend systems, not just CRUD APIs.
+---
 
-What this platform demonstrates
+## 🧠 Core Engineering Principles
 
-✔ Independent service deployment
-✔ Strict data ownership
-✔ Asynchronous communication via events
-✔ Clear separation of read & write workloads
+- Microservices Architecture  
+- Event-Driven Communication (Kafka)  
+- Domain-Driven Design (DDD)  
+- Database-per-Service  
+- Asynchronous Processing  
+- Loose Coupling via Events  
+- Cloud-Native & Container-Ready  
 
-This repository provides a platform-level view of the system architecture, services, and workflows.
+---
 
-🎯 Why This Project Exists
 
-This project is intentionally built to showcase MAANG-level backend engineering thinking.
+### Design Characteristics
 
-It focuses on:
+- Each service owns its own database  
+- Services publish domain events  
+- Services consume only required events  
+- No direct service-to-service coupling  
+- Every service scales independently  
 
-Designing scalable microservices
+---
 
-Handling distributed workflows
+## 🧩 Service Landscape
 
-Event-based communication using Kafka
+### 🛒 Commerce Domain
 
-Data consistency & isolation
+| Service | Responsibility |
+|------|---------------|
+| vnatives-commerce-shop-service | Seller shop onboarding & management |
+| vnatives-commerce-product-catalog-service | Product & category management |
+| vnatives-commerce-inventory-service | Inventory & stock tracking |
+| vnatives-commerce-pricing-discount-service | Pricing rules & discounts |
 
-Cloud-ready, containerized systems
+---
 
-VNatives bridges the gap between learning projects and production-grade backend systems.
+### 📦 Order Domain
 
-🧠 Core Engineering Principles
+| Service | Responsibility |
+|------|---------------|
+| vnatives-order-core-service | Order creation & lifecycle |
+| vnatives-payment-service | Payment processing |
+| vnatives-review-rating-service | Product reviews & ratings |
 
-Microservices Architecture
+---
 
-Event-Driven Communication
+### 🔍 Search Domain
 
-Domain-Driven Design (DDD)
+| Service | Responsibility |
+|------|---------------|
+| vnatives-search-consumer | Kafka consumer for indexing |
+| vnatives-search-service | Product search APIs (ElasticSearch) |
 
-Database-per-Service
+---
 
-Asynchronous Processing
+### 👤 User Domain
 
-Loose Coupling via Kafka
+| Service | Responsibility |
+|------|---------------|
+| vnatives-user-profile-service | User & seller profile management |
 
-Cloud-Native & Container-Ready
+---
 
-🏗️ High-Level Architecture
-Clients
-   ↓
-Security Gateway
-   ↓
-Domain Microservices
-   ↓
-Kafka (Event Backbone)
-   ↓
-Async Consumers (Search, Read Models)
-Design Characteristics
+### 🔐 Platform & Infrastructure
 
-Each service owns its database
+| Component | Responsibility |
+|------|---------------|
+| vnatives-security-gateway | API Gateway & request security |
+| vnatives-common-sdk | Shared DTOs & event contracts |
+| vnatives-infra | Docker, Kafka & database infrastructure |
 
-Services publish domain events
+---
 
-Services consume only required events
+## 🔁 Core Workflows
 
-Every service scales independently
+### 🧑‍🌾 Seller (Native) Flow
 
-🧩 Current Service Landscape
-🛒 Commerce Domain
-Service	Responsibility
-vnatives-commerce-shop-service	Seller shop onboarding & management
-vnatives-commerce-product-catalog-service	Product & category management
-vnatives-commerce-inventory-service	Inventory & stock tracking
-vnatives-commerce-pricing-discount-service	Pricing rules & discounts
-📦 Order Domain
-Service	Responsibility
-vnatives-order-core-service	Order creation & lifecycle
-vnatives-payment-service	Payment processing
-vnatives-review-rating-service	Product reviews & ratings
-🔍 Search Domain
-Service	Responsibility
-vnatives-search-consumer	Kafka consumer for indexing
-vnatives-search-service	Product search APIs (ElasticSearch)
-👤 User Domain
-Service	Responsibility
-vnatives-user-profile-service	User & seller profile management
-🔐 Platform & Infrastructure
-Component	Responsibility
-vnatives-security-gateway	API Gateway & request security
-vnatives-common-sdk	Shared DTOs & event contracts
-vnatives-infra	Docker, Kafka & DB infrastructure
-🔁 Core Workflows
-🧑‍🌾 Seller (Native) Flow
+1. Seller profile created  
+2. Shop onboarded  
+3. Products added  
+4. Inventory & pricing configured  
+5. Domain events published to Kafka  
+6. Search indexes updated asynchronously  
 
-Seller profile created
+**Key Design Insight:**  
+Commerce services never directly call Search services.  
+**Events drive the system — not synchronous REST calls.**
 
-Shop created
+---
 
-Products added
+### 🛍️ Customer Flow
 
-Inventory & pricing configured
-
-Domain events published to Kafka
-
-Search consumer indexes products asynchronously
-
-Key Design Insight
-
-Commerce services never directly call Search — events drive the system.
-
-🛍️ Customer Flow
-
-User searches products via Search Service
-
-Views product details & reviews
-
-Places an order
-
-Payment is processed
-
-Order lifecycle is updated
+1. User searches products via Search Service  
+2. Views product details & reviews  
+3. Places an order  
+4. Payment is processed  
+5. Order lifecycle is updated asynchronously  
 
 Read-heavy operations are optimized separately from write workflows.
 
-🗄️ Data Storage Strategy
-Use Case	Technology	Reason
-Orders & Payments	MySQL	ACID consistency
-Product Catalog	MongoDB	Flexible schema
-Inventory	MySQL	Strong consistency
-Search	ElasticSearch	Full-text search
-Caching (planned)	Redis	Low-latency reads
-🧰 Tech Stack
+---
 
-Language: Java
+## 🗄️ Data Storage Strategy
 
-Framework: Spring Boot
+| Use Case | Technology | Reason |
+|------|----------|-------|
+| Orders & Payments | MySQL | ACID consistency |
+| Product Catalog | MongoDB | Flexible schema |
+| Inventory | MySQL | Strong consistency |
+| Search | ElasticSearch | Full-text search |
+| Caching (Planned) | Redis | Low-latency reads |
 
-Messaging: Apache Kafka
+---
 
-Databases: MySQL, MongoDB
+## 🧰 Tech Stack
 
-Search Engine: ElasticSearch
+- **Language:** Java  
+- **Framework:** Spring Boot  
+- **Messaging:** Apache Kafka  
+- **Databases:** MySQL, MongoDB  
+- **Search Engine:** ElasticSearch  
+- **Caching:** Redis (planned)  
+- **Containerization:** Docker  
+- **Build Tool:** Maven  
+- **Cloud Target:** AWS (ECS / EKS ready)  
 
-Containerization: Docker
+---
 
-Build Tool: Maven
+## 🧪 Local Development
 
-Cloud Target: AWS (ECS / EKS ready)
+Infrastructure is managed via `vnatives-infra` and includes:
 
-🧪 Local Development
+- Kafka & Zookeeper  
+- MySQL  
+- MongoDB  
+- ElasticSearch  
 
-Infrastructure is managed via vnatives-infra and includes:
+Each service:
 
-Kafka & Zookeeper
+- Can run independently  
+- Can be started together via Docker Compose  
+- Mirrors production-style deployment  
 
-MySQL
+---
 
-MongoDB
+## 🎯 What Recruiters Should Notice
 
-ElasticSearch
+This project demonstrates **how I think as a backend engineer**, not just how I write code.
 
-Each service can be run independently or together using Docker Compose.
+- Real microservices boundaries  
+- Event-driven architecture (no REST chaining)  
+- Database-per-service discipline  
+- Read / write workload separation  
+- Cloud-ready deployment mindset  
+- Production-grade design decisions  
 
-👨‍💻 Author
+---
 
-Sundar Pirabu Raj R
-Backend Engineer | Java | Spring Boot | Distributed Systems
-📍 Chennai, India
+## 👨‍💻 Author
 
-📜 License
+**Sundar Pirabu Raj R**  
+Backend Engineer | Java | Spring Boot | Distributed Systems  
+Chennai, India  
+
+---
+
+## 📜 License
 
 Apache License 2.0
+
+
