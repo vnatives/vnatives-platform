@@ -1,0 +1,52 @@
+@startuml
+title Order Saga – Synchronous Orchestration (Failure-Aware)
+
+actor Client
+participant "Order Service\n(Saga Orchestrator)" as Order
+participant "Inventory Service" as Inventory
+participant "Payment Service" as Payment
+database "Order DB" as OrderDB
+
+== Order Creation ==
+Client -> Order : Create Order
+Order -> OrderDB : Save Order (CREATED)
+
+== Inventory Reservation ==
+Order -> Inventory : reserveInventory(orderId, items)
+
+alt Inventory reservation failed
+    Inventory --> Order : false
+    Order -> OrderDB : Update status = CANCELLED
+    Order --> Client : Order Cancelled
+else Inventory reserved
+    Inventory --> Order : true
+    Order -> OrderDB : Update status = INVENTORY_RESERVED
+end
+
+== Payment Processing ==
+Order -> Payment : processPayment(orderId, amount)
+
+alt Payment failed
+    Payment --> Order : false
+    Order -> Inventory : releaseInventory(orderId)
+    Inventory --> Order : released
+    Order -> OrderDB : Update status = PAYMENT_FAILED
+    Order --> Client : Payment Failed
+else Payment successful
+    Payment --> Order : true
+end
+
+== Inventory Commit ==
+Order -> Inventory : commitInventory(orderId)
+
+alt Commit failed
+    Inventory --> Order : false
+    Order -> OrderDB : Update status = CANCELLED
+    Order --> Client : Order Cancelled
+else Commit successful
+    Inventory --> Order : true
+    Order -> OrderDB : Update status = CONFIRMED
+    Order --> Client : Order Confirmed
+end
+
+@enduml
