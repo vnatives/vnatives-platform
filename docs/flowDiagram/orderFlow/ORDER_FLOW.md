@@ -1,22 +1,64 @@
 
 ## Order Saga – Synchronous Orchestration (Current Implementation)
 
-The Order Service implements a Saga Orchestrator to manage distributed order workflows.
+The Order Service implements a Saga Orchestrator to manage distributed order workflows involving Inventory and Payment services.
 
-### Why synchronous saga?
-- Easier reasoning for core business flow
-- Clear compensation handling
-- Deterministic state transitions
+This implementation is explicitly designed to handle failures, compensation, and partial success scenarios in a distributed system.
 
-### Known trade-offs
-- Tighter coupling
-- Higher latency
-- Limited scalability
+### 🎯 Why a Synchronous Saga?
 
-### Future evolution
+This implementation intentionally uses synchronous orchestration instead of events.
+
+Reasons:
+- Easier reasoning about core business invariants
+- Explicit control over compensation steps
+- Deterministic order state transitions
+- Simpler debugging during early system evolution
+
+The focus here is correctness and clarity over maximum scalability.
+
+### 🔁 Saga Flow Summary
+
+- Order is created
+- Inventory is reserved
+- Payment is processed
+- Inventory is committed
+- Order is confirmed
+  
+If any step fails, compensation logic is triggered and the order is moved to a safe terminal state.
+
+### 🔥 Failure Handling (Non-Happy Path)
+
+This saga explicitly handles real-world failure scenarios:
+
+- ❌ Inventory reservation failure → Order is cancelled
+- ❌ Payment failure → Inventory is released, order marked as PAYMENT_FAILED
+- ❌ Inventory commit failure → Order is cancelled
+- ❌ Partial execution → State transitions are persisted and retried safely
+
+No step assumes success by default.
+
+### ⚠️ Known Trade-offs
+
+This design makes the following explicit trade-offs:
+
+- Tighter coupling via synchronous REST calls
+- Higher end-to-end latency
+- Limited horizontal scalability for high traffic
+ 
+These trade-offs are intentional and acknowledged, not accidental.
+
+### 🔮 Future Evolution (Planned)
+
+The saga is designed to evolve without changing business logic:
+
 - Event-driven saga using Kafka
-- Step-based state machine
-- Timeout & retry handling
+- Step-based state machine persisted in DB
+- Timeout & retry handling per step
+- Idempotent event consumers
+- Asynchronous compensation workflows
+
+The core state machine remains the same — only the transport changes.
 
 
 ### Code Implementation
@@ -65,3 +107,6 @@ The Order Service implements a Saga Orchestrator to manage distributed order wor
           return orderRepository.save(order);
       }
     }
+
+### Notes:
+- 📊 Refer to `docs/flowDiagram/orderFlow/PlantUML.png` for the failure-aware saga flow diagram.
